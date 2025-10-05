@@ -1,32 +1,22 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, ICreature
+public class PlayerController : MonoBehaviour
 {
-    [Header("Stats")]
-    [SerializeField] private int level = 1;
-    [SerializeField] private float health = 10f;
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float maxSwingSpeed = 10f;
-    [SerializeField] private float swingAcceleration = 10f;
-    [SerializeField] private float weight = 10f;
-
-    public int Level => level;
-    public float Health => health;
-    public float MoveSpeed => moveSpeed;
-    public float MaxSwingSpeed => maxSwingSpeed;
-    public float SwingAcceleration => swingAcceleration;
-    public float Weight => weight;
+    [Header("Player Creature")]
+    [SerializeField] private GameObject player;
 
     private InputSystem_Actions controls;
     private Vector2 moveInput;
 
     private Rigidbody2D rb;
+    private CreatureController creatureController;
 
     void Awake()
     {
         controls = new InputSystem_Actions();
-        rb = GetComponent<Rigidbody2D>();
+        rb = player.GetComponent<Rigidbody2D>();
+        creatureController = player.GetComponent<CreatureController>();
 
         controls.Player.Move.performed += OnMovePerformed;
         controls.Player.Move.canceled += OnMoveCanceled;
@@ -49,7 +39,10 @@ public class PlayerController : MonoBehaviour, ICreature
 
     void Update()
     {
-        rb.linearVelocity = moveSpeed * moveInput;
+        if (creatureController != null && creatureController.gameObject.activeSelf)
+        {
+            rb.linearVelocity = creatureController.MoveSpeed * moveInput;
+        }
     }
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)
@@ -60,20 +53,5 @@ public class PlayerController : MonoBehaviour, ICreature
     private void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
         moveInput = Vector2.zero;
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        var weapon = collision.gameObject.GetComponent<IWeapon>();
-        if (weapon != null)
-        {
-            float computedDamage = collision.relativeVelocity.magnitude * weapon.Damage;
-            TakeDamage(computedDamage);
-        }
-    }
-
-    public void TakeDamage(float incomingDamage)
-    {
-        health = Mathf.Max(0, health - incomingDamage);
     }
 }

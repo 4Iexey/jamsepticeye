@@ -3,19 +3,24 @@ using UnityEngine;
 public class Weapon : MonoBehaviour, IWeapon
 {
     [Header("Stats")]
-    [SerializeField] private int _level = 1;
-    [SerializeField] private float _damage = 1;
-    [SerializeField] private float _weight = 10f;
+    [SerializeField] private int level = 1;
+    [SerializeField] private float damage = 1;
+    [SerializeField] private float weight = 10f;
 
-    public int Level => _level;
+    [Header("Config")]
+    [SerializeField] private float speedDamageTreshold = 1f;
+
+    public int Level => level;
     public float Damage => ComputeDamage();
-    public float Weight => _weight;
+    public float Weight => weight;
 
-    ICreature wieldingCreature;
-    HingeJoint2D joint;
+    private ICreature wieldingCreature;
+    private HingeJoint2D joint;
+    private Rigidbody2D rb;
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         joint = GetComponent<HingeJoint2D>();
         if (joint.connectedBody != null)
         {
@@ -36,7 +41,7 @@ public class Weapon : MonoBehaviour, IWeapon
     void OnTriggerEnter2D(Collider2D other)
     {
         ICreature creature = other.gameObject.GetComponent<ICreature>();
-        if (wieldingCreature == null && creature.Level >= _level)
+        if (wieldingCreature == null && rb.linearVelocity.magnitude < speedDamageTreshold && rb.angularVelocity < speedDamageTreshold && creature != null && creature.Level >= level)
         {
             wieldingCreature = other.gameObject.GetComponent<ICreature>();
             joint.connectedBody = other.gameObject.GetComponent<Rigidbody2D>();
@@ -45,9 +50,9 @@ public class Weapon : MonoBehaviour, IWeapon
 
     public float ComputeDamage()
     {
-        if (wieldingCreature != null)
+        if (wieldingCreature != null || rb.linearVelocity.magnitude > speedDamageTreshold || rb.angularVelocity > speedDamageTreshold)
         {
-            return _damage;
+            return damage;
         }
         return 0;
     }
