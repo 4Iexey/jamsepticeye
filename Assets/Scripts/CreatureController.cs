@@ -11,7 +11,7 @@ public class CreatureController : MonoBehaviour, ICreature
     [SerializeField] private float weight = 10f;
 
     [Header("Weapon")]
-    [SerializeField] private HingeJoint2D joint;    
+    [SerializeField] private HingeJoint2D joint = null;
 
     public int Level => level;
     public float Health => health;
@@ -26,10 +26,12 @@ public class CreatureController : MonoBehaviour, ICreature
     }
 
     public float originalHealth;
+    private EnemyController enemyController;
 
     void Awake()
     {
         originalHealth = health;
+        enemyController = GetComponent<EnemyController>();
     }
 
     void Start()
@@ -49,6 +51,7 @@ public class CreatureController : MonoBehaviour, ICreature
         {
             float computedDamage = collision.relativeVelocity.magnitude * weapon.Damage;
             TakeDamage(computedDamage);
+            if (enemyController != null) enemyController.huntingTarget = collision.gameObject.transform;
         }
     }
 

@@ -446,7 +446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7531811237328478021, guid: 1ce02ac0ddf9121968eb43dde6822cf6, type: 3}
       propertyPath: m_Name
-      value: Creature (1)
+      value: player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -738,11 +738,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5071464342033513606, guid: 3051a7bb352714857a3c415e94144c5c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.47
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 5071464342033513606, guid: 3051a7bb352714857a3c415e94144c5c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.62
+      value: 5.03
       objectReference: {fileID: 0}
     - target: {fileID: 5071464342033513606, guid: 3051a7bb352714857a3c415e94144c5c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -801,6 +801,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2250956574663322643, guid: 1ce02ac0ddf9121968eb43dde6822cf6, type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250956574663322643, guid: 1ce02ac0ddf9121968eb43dde6822cf6, type: 3}
+      propertyPath: moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5069106817514076956, guid: 1ce02ac0ddf9121968eb43dde6822cf6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.88

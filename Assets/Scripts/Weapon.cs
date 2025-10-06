@@ -8,7 +8,7 @@ public class Weapon : MonoBehaviour, IWeapon
     [SerializeField] private float weight = 10f;
 
     [Header("Config")]
-    [SerializeField] private float speedDamageTreshold = 1f;
+    [SerializeField] private float speedDamageTreshold = 5f;
 
     public int Level => level;
     public float Damage => ComputeDamage();

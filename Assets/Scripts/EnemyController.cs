@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float fleeingRadius = 10;
 
     [SerializeField] private Vector2 target;
-    [SerializeField] private Transform huntingTarget;
+    [SerializeField] public Transform huntingTarget;
     private Rigidbody2D rb;
     private CreatureController creatureController;
     private float targetThreshold = 0.25f;
@@ -42,10 +42,11 @@ public class EnemyController : MonoBehaviour
         }
 
         // wandering state
-        if ((huntingTarget == null || creatureController.Health < creatureController.originalHealth / 4) && Vector2.Distance(transform.position, target) < targetThreshold)
+        if ((huntingTarget == null) && Vector2.Distance(transform.position, target) < targetThreshold)
         {
             // Debug.Log("wandering");
             target = GetWanderingTarget();
+            EndUseWeapon();
         }
 
         // fleeing state
@@ -53,6 +54,7 @@ public class EnemyController : MonoBehaviour
         {
             // Debug.Log("fleeing");
             target = (transform.position - huntingTarget.position).normalized * fleeingRadius * 2;
+            TryToUseWeapon();
         }
 
         // hunting state
@@ -60,6 +62,7 @@ public class EnemyController : MonoBehaviour
         {
             // Debug.Log("hunting");
             target = huntingTarget.position;
+            TryToUseWeapon();
         }
     }
 
@@ -75,5 +78,27 @@ public class EnemyController : MonoBehaviour
             return wanderPoint;
         }
         return transform.position;
+    }
+
+    private void TryToUseWeapon()
+    {
+        if (creatureController.Joint != null && !creatureController.Joint.useMotor)
+        {
+            var motor = creatureController.Joint.motor;
+
+            motor.motorSpeed = creatureController.MaxSwingSpeed;
+            motor.maxMotorTorque = creatureController.SwingAcceleration;
+
+            creatureController.Joint.motor = motor;
+            creatureController.Joint.useMotor = true;
+        }
+    }
+
+    private void EndUseWeapon()
+    {
+        if (creatureController.Joint != null)
+        {
+            creatureController.Joint.useMotor = false;
+        }
     }
 }
