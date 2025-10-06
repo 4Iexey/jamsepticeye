@@ -10,12 +10,20 @@ public class CreatureController : MonoBehaviour, ICreature
     [SerializeField] private float swingAcceleration = 10f;
     [SerializeField] private float weight = 10f;
 
+    [Header("Weapon")]
+    [SerializeField] private HingeJoint2D joint;    
+
     public int Level => level;
     public float Health => health;
     public float MoveSpeed => moveSpeed;
     public float MaxSwingSpeed => maxSwingSpeed;
     public float SwingAcceleration => swingAcceleration;
     public float Weight => weight;
+    public HingeJoint2D Joint
+    {
+        get => joint;
+        set => joint = value;
+    }
 
     public float originalHealth;
 

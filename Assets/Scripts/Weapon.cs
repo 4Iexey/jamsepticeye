@@ -41,9 +41,10 @@ public class Weapon : MonoBehaviour, IWeapon
     void OnTriggerEnter2D(Collider2D other)
     {
         ICreature creature = other.gameObject.GetComponent<ICreature>();
-        if (wieldingCreature == null && rb.linearVelocity.magnitude < speedDamageTreshold && rb.angularVelocity < speedDamageTreshold && creature != null && creature.Level >= level)
+        if (wieldingCreature == null && rb.linearVelocity.magnitude < speedDamageTreshold && rb.angularVelocity < speedDamageTreshold && creature != null && creature.Level >= level && creature.Joint == null)
         {
-            wieldingCreature = other.gameObject.GetComponent<ICreature>();
+            wieldingCreature = creature;
+            wieldingCreature.Joint = joint;
             joint.connectedBody = other.gameObject.GetComponent<Rigidbody2D>();
         }
     }
